@@ -1,3 +1,4 @@
+FROM node:22.23.4-alpine AS node-runtime
 FROM hexpm/elixir:1.17.3-erlang-27.1-alpine-3.20.3 AS builder-deps
 
 WORKDIR /app
@@ -25,8 +26,11 @@ COPY apps ./apps
 ##############################################################
 FROM builder-deps AS builder-ui
 
-RUN apk --no-cache --update add nodejs npm && \
-    npm install npm@latest
+COPY --from=node-runtime /usr/local/bin/node /usr/local/bin/node
+COPY --from=node-runtime /usr/local/lib/node_modules /usr/local/lib/node_modules
+RUN ln -s ../lib/node_modules/npm/bin/npm-cli.js /usr/local/bin/npm && \
+    ln -s ../lib/node_modules/npm/bin/npx-cli.js /usr/local/bin/npx && \
+    test "$(node --version)" = "v22.23.4"
 
 # Add blockscout npm deps
 RUN cd apps/block_scout_web/assets/ && \
