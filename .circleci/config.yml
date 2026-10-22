@@ -228,7 +228,7 @@ jobs:
   eslint:
     docker:
       # Ensure .tool-versions matches
-      - image: circleci/node:12.18.2-browsers-legacy
+      - image: cimg/node:22.23.4-browsers
 
     working_directory: ~/app
 
@@ -270,7 +270,7 @@ jobs:
   jest:
     docker:
       # Ensure .tool-versions matches
-      - image: circleci/node:12.18.2-browsers-legacy
+      - image: cimg/node:22.23.4-browsers
 
     working_directory: ~/app
 
